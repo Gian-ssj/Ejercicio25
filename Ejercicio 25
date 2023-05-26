@@ -1,0 +1,28 @@
+// Pines del Arduino
+const int sensorPin = A0;    // Pin analógico para el sensor de humedad del suelo
+const int relayPin = 2;      // Pin digital para el módulo de relé
+
+// Umbral de humedad del suelo para activar el riego
+const int threshold = 500;
+
+void setup() {
+  pinMode(relayPin, OUTPUT);
+  digitalWrite(relayPin, LOW);  // Apagar la válvula solenoide inicialmente
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Leer el valor del sensor de humedad del suelo
+  int soilMoisture = analogRead(sensorPin);
+
+  // Comprobar si la humedad del suelo está por debajo del umbral
+  if (soilMoisture < threshold) {
+    Serial.println("Activando el riego...");
+    digitalWrite(relayPin, HIGH);  // Encender la válvula solenoide
+    delay(5000);                    // Duración del riego (5 segundos)
+    digitalWrite(relayPin, LOW);   // Apagar la válvula solenoide
+    Serial.println("Riego completado.");
+  }
+
+  delay(1000);  // Esperar 1 segundo antes de volver a verificar
+}
